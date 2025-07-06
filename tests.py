@@ -1,4 +1,5 @@
-from functions.get_files_info import get_files_info
+from functions.get_file_content import get_file_content
+# from functions.get_files_info import get_files_info
 
 def print_with_red(*args, **kwargs):
    print('\033[31m')
@@ -7,10 +8,9 @@ def print_with_red(*args, **kwargs):
       
 
 test_calls = [
-   (get_files_info, "calculator", "."),
-   (get_files_info, "calculator", "pkg"),
-   (get_files_info, "calculator", "/bin"),
-   (get_files_info, "calculator", "../"),
+   (get_file_content, "calculator", "main.py"),
+   (get_file_content, "calculator", "pkg/calculator.py"),
+   (get_file_content, "calculator", "/bin/cat"),
 ]
 
 def main():
