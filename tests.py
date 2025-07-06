@@ -1,5 +1,4 @@
-from functions.get_file_content import get_file_content
-# from functions.get_files_info import get_files_info
+from functions.write_file import write_file
 
 def print_with_red(*args, **kwargs):
    print('\033[31m')
@@ -8,19 +7,20 @@ def print_with_red(*args, **kwargs):
       
 
 test_calls = [
-   (get_file_content, "calculator", "main.py"),
-   (get_file_content, "calculator", "pkg/calculator.py"),
-   (get_file_content, "calculator", "/bin/cat"),
+   (write_file, "calculator", "lorem.txt", "wait, this isn't lorem ipsum"),
+   (write_file, "calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet"),
+   (write_file, "calculator", "/tmp/temp.txt", "this should not be allowed"),
 ]
 
 def main():
-   for func, param1, param2 in test_calls:
+   for func, param1, param2, param3 in test_calls:
       print_with_red('=====================\n')
       print(func.__name__)
       print('working_directory =', param1)
       print('directory =', param2)
+      print('content =', param3)
       print('Results:\n')
-      print(func(param1, param2))
+      print(func(param1, param2, param3))
       print_with_red('=====================\n')
    
 if __name__ == "__main__":
