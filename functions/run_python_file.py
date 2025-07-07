@@ -1,7 +1,22 @@
 import os
 import subprocess
 from subprocess import CalledProcessError
+from google.genai import types
 
+
+schema_run_python_file = types.FunctionDeclaration(
+   name="run_python_file",
+   description="(Use with caution and surety) Run a Python file. This function tries to run a Python file and if successful, returns an output containing stdout, stderr and also an exit code field if the run file try exits with a non-zero code. If a file is not a Python file it returns an error. If no output is produced it returns exactly 'No output produced.'. Also handles other exceptions, if occurs, and returns them as 'Error: {exception}'",
+   parameters=types.Schema(
+      type=types.Type.OBJECT,
+      properties={
+         "file_path": types.Schema(
+            type=types.Type.STRING,
+            description="The file_path parameter, could include slashes too but must be inside the working directory (the working directory although is hard coded in the code). This parameter specifies which python file to run"
+         )
+      }
+   )
+)
 
 def run_python_file(working_directory, file_path):
    try:

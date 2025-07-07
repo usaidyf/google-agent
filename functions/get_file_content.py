@@ -1,6 +1,22 @@
 import os
+from google.genai import types
 
 MAX_CHARS = 10000
+
+
+schema_get_file_content = types.FunctionDeclaration(
+   name="get_file_content",
+   description=f"Get the contents of a file specified with the file_path parameter, using this function. Truncates the output to {MAX_CHARS} characters, and if output is equal to {MAX_CHARS} characters, appends '[...File \"file_path\" truncated at 10000 characters]' to the end of the output.",
+   parameters=types.Schema(
+      type=types.Type.OBJECT,
+      properties={
+         "file_path": types.Schema(
+            type=types.Type.STRING,
+            description="The file to get the contents from, relative to the working directory."
+         )
+      }
+   )
+)
 
 
 def get_file_content(working_directory, file_path):

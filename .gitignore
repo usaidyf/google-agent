@@ -5,7 +5,10 @@ build/
 dist/
 wheels/
 *.egg-info
+
+# Others
 .env
+lorem.txt
 
 # Virtual environments
 .venv
