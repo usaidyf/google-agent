@@ -91,28 +91,46 @@ def main():
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
     ]
 
-    response = client.models.generate_content(
-        model="gemini-2.0-flash-001",
-        contents=messages,
-        config=types.GenerateContentConfig(
-            tools=[available_functions], system_instruction=system_prompt
-        ),
-    )
-
     if is_verbose:
         print(f"User prompt: {user_prompt}")
 
-    if response.function_calls is not None:
-        for fn_call_part in response.function_calls:
-            fn_call_result = call_function(fn_call_part, is_verbose)
-            try:
-                if is_verbose:
-                    print(f"-> {fn_call_result.parts[0].function_response.response}")
-            except Exception as e:
-                raise Exception("Function call result has an unexpected structure")
-                
-    else:
-        print(response.text)
+
+    # Main Agent loop
+    i = 1
+    while True:
+        if i >= 20:
+            break
+        
+        response = client.models.generate_content(
+            model="gemini-2.0-flash-001",
+            contents=messages,
+            config=types.GenerateContentConfig(
+                tools=[available_functions], system_instruction=system_prompt
+            ),
+        )
+
+        if response.candidates is not None:
+            for candidate in response.candidates:
+                messages.append(candidate.content)
+
+        if response.function_calls is not None:
+            for fn_call_part in response.function_calls:
+                fn_call_result = call_function(fn_call_part, is_verbose)
+                messages.append(fn_call_result)
+                try:
+                    if is_verbose:
+                        print(
+                            f"-> {fn_call_result.parts[0].function_response.response}"
+                        )
+                except Exception as e:
+                    raise Exception(
+                        f"Function call result has an unexpected structure {e}"
+                    )
+        else:
+            print(response.text)
+            break
+
+        i += 1
 
     if is_verbose:
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
