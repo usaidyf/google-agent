@@ -1,1 +1,1 @@
-# Toy Version of OpenAI Codex/Claude Code
+# OpenAI Codex/Claude Code Clone
